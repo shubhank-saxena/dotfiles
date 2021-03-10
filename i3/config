@@ -1,0 +1,182 @@
+# Set mod variable to super key
+set $mod Mod4
+
+# Turn borders off
+for_window [class="^.*"] border pixel 0
+
+# Change gap size
+gaps outer 4
+gaps inner 20
+
+# Drag floating windows
+floating_modifier $mod
+
+# Start a terminator terminal emulator instance
+bindsym $mod+Return exec terminator
+
+# Kill focused window
+bindsym $mod+q kill
+
+# Start rofi drun menu
+bindsym $mod+space exec ~/Scripts/rofi/launch.sh drun 
+
+# Bind key for locking the system
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/lock.sh
+
+#Key bindings for screenshot 
+bindsym Print           exec --no-startup-id scrot -e 'mv $f ~/Pictures/screenshots/'
+bindsym Shift+Print     exec --no-startup-id scrot -u -e 'mv $f ~/Pictures/screenshots/'
+bindsym --release $mod+Shift+Print exec "~/.config/i3/screenshot -s ~/Pictures/screenshots/"
+bindsym $mod+Scroll_Lock    exec --no-startup-id "killall screenkey || screenkey"
+bindsym $mod+Print      exec --no-startup-id dmenurecord
+bindsym $mod+Delete     exec $stoprec & notify-send "The recording has been stopped"
+# Multiple montior support
+exec --no-startup-id xrandr --output HDMI-1-1 --left-of eDP-1-1
+
+set $firstMonitor eDP-1-1
+set $secondMonitor HDMI-1-1
+
+workspace 1 output $firstMontior
+workspace 2 output $secondMontior
+workspace 3 output $firstMontior
+workspace 4 output $seconfMontior
+workspace 5 output $firstMontior
+workspace 6 output $secondMontior
+workspace 7 output $firstMontior
+workspace 8 output $secondMontior
+
+# Bind audio keys to pactl volume control
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# Bind brightness keys to light interface
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Move focus with the arrow keys
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move windows with shift + arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Split in specified direction
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# Change container layout
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+Control+space focus mode_toggle
+
+# Bind keys to switch to next workspace
+bindsym $mod+bracketright workspace next
+bindsym $mod+bracketleft workspace prev
+
+# Switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Move workspaces between monitors
+#bindsym $mod+Shift+m move workspace to output primary
+#bindsym $mod+Shift+s move workspave to output HDMI-1-1
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace
+bindsym $mod+Shift+r restart
+
+# Exit i3
+bindsym $mod+Shift+e exec ~/Scripts/rofi/launch.sh powermenu
+
+# Add resize keybindings in place of mode
+bindsym $mod+Control+Left resize shrink width 10 px or 10
+bindsym $mod+Control+Down resize grow height 10 px or 10
+bindsym $mod+Control+Up resize shrink height 10 px or 10
+bindsym $mod+Control+Right resize grow width 10 px or 10
+bindsym $mod+Shift+Control+Left resize shrink width 1 px or 1
+bindsym $mod+Shift+Control+Down resize grow height 1 px or 1
+bindsym $mod+Shift+Control+Up resize shrink height 1 px or 1
+bindsym $mod+Shift+Control+Right resize grow width 1 px or 1
+
+# mpv music controller bindings
+set $controller ~/Scripts/mpv-controller.sh
+bindsym $mod+Shift+P exec $controller pause
+bindsym $mod+Shift+bracketleft exec $controller prev
+bindsym $mod+Shift+bracketright exec $controller next
+bindsym $mod+Shift+semicolon exec $controller skip -10
+bindsym $mod+Shift+apostrophe exec $controller skip 10
+bindsym $mod+Shift+comma exec $controller skipper -5
+bindsym $mod+Shift+period exec $controller skipper 5
+bindsym $mod+Shift+m exec ~/Scripts/rofi/launch.sh music
+bindsym $mod+Shift+l exec $controller stop
+bindsym $mod+Shift+o exec $controller info
+bindsym $mod+Shift+minus exec $controller vol -10
+bindsym $mod+Shift+equal exec $controller vol 10
+
+# Always float certain windows
+for_window [class="mpv"] floating enable
+for_window [class="Pavucontrol"] floating enable
+
+# Make sure fonts are loaded right
+exec_always xset +fp /home/shubhank/.fonts/
+exec_always xset fp rehash
+
+# Run startup wallpaper
+exec_always bash -c "feh --bg-fill $(cat ~/Scripts/default-bg.txt | tr -d '\n')"
+
+# Allow scripts to interface with dbus
+exec_always --no-startup-id ~/Scripts/Xdbus.sh
+
+# Start notification daemon
+exec_always --no-startup-id dunst
+
+# Enable tap to click - will need to change input
+# device id and property number. See [link] for more
+exec_always --no-startup-id xinput set-prop 12 284 1 > /dev/null 2>&1
+
+# Startup daemons for compositor and status bar
+exec_always --no-startup-id pkill picom; picom --no-use-damage
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# Increase screen contrast (disable for better displays)
+exec_always --no-startup-id xrandr --output eDP --gamma 0.8:0.8:0.8
+
+exec --no-startup-id pulseaudio --start
